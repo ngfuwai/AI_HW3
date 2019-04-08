@@ -2,7 +2,8 @@ import random
 import math
 import numpy as np
 from scipy import stats
-
+TEAM_NAME = "swagteam123"
+MEMBERS = ["dhy4wb", "tw9nx", "jygm"]
 # state = {
 #     "team-code": "eef8976e",
 #     "game": "chicken",
@@ -17,20 +18,20 @@ from scipy import stats
 #
 # }
 
-state = {
-   "game": "connect_more",
-   "opponent-name": "mighty_ducks",
-   "columns": 6,
-   "connect_n": 5,
-   "your-token": "R",
-   "board": [
-    [],
-    [],
-    [],
-    ['Y'],
-    [],
-    [],
-] }
+# state = {
+#    "game": "connect_more",
+#    "opponent-name": "mighty_ducks",
+#    "columns": 6,
+#    "connect_n": 5,
+#    "your-token": "R",
+#    "board": [
+#     [],
+#     [],
+#     [],
+#     ['Y'],
+#     [],
+#     [],
+# ] }
 
 # state2 = {
 #    "game": "connect_more",
@@ -87,7 +88,7 @@ def vertical_score(position, token):
             o_count += 1
         i += 1
     if o_count == in_a_row-1:
-        return (position, 99999)
+        return (position, 99999) # if you can win on this move, make the winning move
     return (position, o_count) if o_count > e_count else (position, e_count)
 
 def horizontal_score(position, token):
@@ -319,14 +320,14 @@ def get_move(state):
                 left = [-1, -1]
                 right = [-1, -1]
                 above_scores = score(move_location, token)
-                print(score(move_location, token)) # above
+                #print(score(move_location, token)) # above
                 above[0] = above_scores[0][0]
                 for results in above_scores:
                     above[1] += results[1]
                 # print(above)
                 if move_location - 1 >= 0:
                     left_scores = score(move_location - 1, token)
-                    print(score(move_location-1, token)) #left
+                    #print(score(move_location-1, token)) #left
                     left[0] = left_scores[0][0]
                     left[1] = 0
                     for results in left_scores:
@@ -334,7 +335,7 @@ def get_move(state):
                     # print(left)
                 if move_location + 1 < len(board_state):
                     right_scores = score(move_location + 1, token)
-                    print(score(move_location+1, token)) #right
+                    #print(score(move_location+1, token)) #right
                     right[0] = right_scores[0][0]
                     right[1] = 0
                     for results in right_scores:
@@ -354,7 +355,7 @@ def get_move(state):
                     result = all_three[random.randint(0, occurences - 1)][0]
                     # print(result)
                     board_state[result].append(state['your-token'])
-                    print(board_state)
+                    #print(board_state)
                     return result
                 else:
                     board_state[all_three[0][0]].append(state['your-token'])
@@ -413,7 +414,7 @@ def get_move(state):
                 result = all_three[random.randint(0, occurences-1)][0]
                 #print(result)
                 board_state[result].append(state['your-token'])
-                print(board_state)
+                #print(board_state)
                 return result
             else:
                 board_state[all_three[0][0]].append(state['your-token'])
@@ -421,7 +422,7 @@ def get_move(state):
 
 
 
-get_move(state)
+#get_move(state)
 #get_move(state2)
     
     # print(get_move(state))
