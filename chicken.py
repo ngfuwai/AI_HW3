@@ -27,25 +27,25 @@ state = {
     [],
     [],
     [],
-    [],
+    ['Y'],
     [],
     [],
 ] }
 
-state2 = {
-   "game": "connect_more",
-   "opponent-name": "mighty_ducks",
-   "columns": 6,
-   "connect_n": 5,
-   "your-token": "R",
-   "board": [
-    [],
-    [],
-    ['Y'],
-    ['R'],
-    [],
-    [],
-] }
+# state2 = {
+#    "game": "connect_more",
+#    "opponent-name": "mighty_ducks",
+#    "columns": 6,
+#    "connect_n": 5,
+#    "your-token": "R",
+#    "board": [
+#     [],
+#     [],
+#     ['Y'],
+#     ['R'],
+#     [],
+#     [],
+# ] }
 
 
 # global variables
@@ -292,6 +292,8 @@ def get_move(state):
         global scores
         global in_a_row
         if len(board_state)==0: # for beginning of the game scenarios
+            move_location = -1
+            token = ''
             in_a_row = state["connect_n"]
             empty = True
             for i in range(state["columns"]):
@@ -302,6 +304,8 @@ def get_move(state):
                 if len(state["board"][i]) != 0:
                     #board_state[column].append(column[0])
                     empty = False
+                    move_location = i
+                    token = board_state[i][-1]
                     #calculate_scores(i)
             # you have the first move
             if empty:
@@ -310,6 +314,54 @@ def get_move(state):
 
                 print(board_state)
                 return starting_point
+            else:
+                above = [-1, 0]
+                left = [-1, -1]
+                right = [-1, -1]
+                above_scores = score(move_location, token)
+                print(score(move_location, token)) # above
+                above[0] = above_scores[0][0]
+                for results in above_scores:
+                    above[1] += results[1]
+                # print(above)
+                if move_location - 1 >= 0:
+                    left_scores = score(move_location - 1, token)
+                    print(score(move_location-1, token)) #left
+                    left[0] = left_scores[0][0]
+                    left[1] = 0
+                    for results in left_scores:
+                        left[1] += results[1]
+                    # print(left)
+                if move_location + 1 < len(board_state):
+                    right_scores = score(move_location + 1, token)
+                    print(score(move_location+1, token)) #right
+                    right[0] = right_scores[0][0]
+                    right[1] = 0
+                    for results in right_scores:
+                        right[1] += results[1]
+                    # print(right)
+                all_three = [above, left, right]
+                all_three.sort(key=lambda x: x[1], reverse=1)
+                # print(all_three)
+                max = all_three[0][1]
+                occurences = 0
+                for arr in all_three:
+                    if arr[1] == max:
+                        occurences += 1
+                    else:
+                        break
+                if occurences > 1:
+                    result = all_three[random.randint(0, occurences - 1)][0]
+                    # print(result)
+                    board_state[result].append(state['your-token'])
+                    print(board_state)
+                    return result
+                else:
+                    board_state[all_three[0][0]].append(state['your-token'])
+                    return all_three[0][0]
+
+
+
         else:
             token = "R"
             for i in range(0, state['columns']):
@@ -370,7 +422,7 @@ def get_move(state):
 
 
 get_move(state)
-get_move(state2)
+#get_move(state2)
     
     # print(get_move(state))
     #
